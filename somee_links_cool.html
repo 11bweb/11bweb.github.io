@@ -1,0 +1,153 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;700;900&family=DM+Mono&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  background:#080810;
+  min-height:100vh;
+  font-family:'Outfit',sans-serif;
+  display:flex;flex-direction:column;align-items:center;
+  padding:0 0 80px;
+  overflow-x:hidden;
+}
+
+/* animated aurora bg */
+.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.aurora span{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.18;animation:drift 12s ease-in-out infinite;}
+.aurora span:nth-child(1){width:600px;height:600px;background:#7c3aed;top:-100px;left:-150px;animation-delay:0s;}
+.aurora span:nth-child(2){width:500px;height:500px;background:#0ea5e9;top:200px;right:-100px;animation-delay:-4s;}
+.aurora span:nth-child(3){width:400px;height:400px;background:#ec4899;bottom:0;left:30%;animation-delay:-8s;}
+@keyframes drift{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-40px) scale(1.08);}}
+
+/* noise overlay */
+.noise{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size:200px;
+}
+
+/* header */
+.header{position:relative;z-index:2;width:100%;max-width:720px;padding:64px 24px 0;display:flex;flex-direction:column;gap:8px;}
+.label{font-size:0.65rem;letter-spacing:6px;text-transform:uppercase;color:rgba(255,255,255,0.25);font-family:'DM Mono',monospace;}
+.big-title{font-size:clamp(4rem,14vw,8rem);font-weight:900;line-height:0.88;letter-spacing:-4px;
+  background:linear-gradient(135deg,#fff 30%,rgba(255,255,255,0.3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.tagline{font-size:0.8rem;color:rgba(255,255,255,0.3);letter-spacing:1px;font-weight:200;margin-top:4px;padding-left:2px;}
+
+/* pill badge */
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:100px;padding:6px 14px;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-top:20px;font-family:'DM Mono',monospace;width:fit-content;}
+.dot{width:6px;height:6px;border-radius:50%;background:#22d3ee;box-shadow:0 0 8px #22d3ee;}
+
+/* divider */
+.rule{width:100%;max-width:720px;height:1px;background:rgba(255,255,255,0.06);margin:32px 0 24px;position:relative;z-index:2;}
+
+/* list */
+.list{width:100%;max-width:720px;padding:0 24px;position:relative;z-index:2;display:flex;flex-direction:column;gap:6px;}
+
+.item{
+  position:relative;
+  display:flex;align-items:center;gap:0;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:16px;
+  text-decoration:none;
+  color:#fff;
+  overflow:hidden;
+  transition:border-color .2s, background .2s, transform .15s;
+  backdrop-filter:blur(4px);
+}
+.item:hover{
+  background:rgba(255,255,255,0.07);
+  border-color:rgba(255,255,255,0.18);
+  transform:translateY(-1px);
+}
+
+/* shine sweep on hover */
+.item::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.06) 50%,transparent 60%);
+  transform:translateX(-100%);
+  transition:transform .45s ease;
+  pointer-events:none;
+}
+.item:hover::after{transform:translateX(100%);}
+
+.item-num{
+  width:56px;flex-shrink:0;text-align:center;
+  font-family:'DM Mono',monospace;font-size:0.62rem;
+  color:rgba(255,255,255,0.15);letter-spacing:1px;
+}
+.item-sep{width:1px;height:52px;background:rgba(255,255,255,0.06);flex-shrink:0;}
+.item-body{flex:1;padding:14px 18px;display:flex;flex-direction:column;gap:3px;}
+.item-name{font-weight:700;font-size:0.95rem;letter-spacing:-0.3px;color:rgba(255,255,255,0.9);}
+.item-url{font-family:'DM Mono',monospace;font-size:0.6rem;color:rgba(255,255,255,0.2);letter-spacing:0.3px;}
+.item-arrow{
+  width:52px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:1rem;color:rgba(255,255,255,0.12);
+  transition:color .2s,transform .2s;
+}
+.item:hover .item-arrow{color:rgba(255,255,255,0.6);transform:translate(2px,-2px);}
+
+/* glow on specific items for flair */
+.item:nth-child(3n+1):hover{border-color:rgba(124,58,237,0.4);box-shadow:0 0 24px rgba(124,58,237,0.1);}
+.item:nth-child(3n+2):hover{border-color:rgba(14,165,233,0.4);box-shadow:0 0 24px rgba(14,165,233,0.1);}
+.item:nth-child(3n):hover{border-color:rgba(236,72,153,0.4);box-shadow:0 0 24px rgba(236,72,153,0.1);}
+
+footer{position:relative;z-index:2;margin-top:40px;font-size:0.6rem;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.1);font-family:'DM Mono',monospace;}
+</style>
+
+<div class="aurora"><span></span><span></span><span></span></div>
+<div class="noise"></div>
+
+<div class="header">
+  <span class="label">web dizini / 2025</span>
+  <h1 class="big-title">SOMEE<br>LINKS</h1>
+  <p class="tagline">tıkla, git, kaybol.</p>
+  <div class="badge"><span class="dot"></span>18 aktif adres</div>
+</div>
+
+<div class="rule"></div>
+
+<div class="list" id="list"></div>
+
+<footer>somee.com &mdash; yeni sekmede açılır</footer>
+
+<script>
+const urls=[
+  "http://tokatli.somee.com/",
+  "http://egemetin.somee.com/",
+  "http://akobaba.somee.com/",
+  "http://kaganaltun.somee.com/",
+  "http://sanliweb.somee.com/",
+  "http://derinirmak.somee.com/",
+  "http://erenika.somee.com/",
+  "http://f5myusuf.somee.com/",
+  "http://11b-eneskayra-463.somee.com/",
+  "http://kardelenyu.somee.com/",
+  "http://yagmurmuradova.somee.com/",
+  "http://kubilay4214.somee.com/",
+  "http://emirhanbaba.somee.com/",
+  "http://ensarvo1.somee.com/",
+  "http://cikxsw.somee.com/",
+  "http://bayrakciomer.somee.com/",
+  "http://fatihenes.somee.com/",
+  "http://knucksy.somee.com/"
+];
+const list=document.getElementById('list');
+urls.forEach((url,i)=>{
+  const name=url.replace('http://','').replace('.somee.com/','');
+  const a=document.createElement('a');
+  a.href=url;a.target='_blank';a.rel='noopener noreferrer';
+  a.className='item';
+  a.innerHTML=`
+    <span class="item-num">${String(i+1).padStart(2,'0')}</span>
+    <span class="item-sep"></span>
+    <span class="item-body">
+      <span class="item-name">${name}</span>
+      <span class="item-url">${url}</span>
+    </span>
+    <span class="item-arrow">↗</span>
+  `;
+  list.appendChild(a);
+});
+</script>
